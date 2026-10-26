@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Sitzt – Demo v3</title>
+<title>Taglia – Demo</title>
+<meta name="description" content="Taglia: Kleidung, die sitzt. Beim ersten Mal. Demo mit Beispieldaten.">
 <style>
 :root{--page:#E5E5EA;--bg:#F7F7F9;--card:#fff;--ink:#1D1D1F;--mute:#6E6E73;--line:#E3E3E8;--sitzt-accent:#111;--sitzt-onaccent:#fff;--green:#30B158;--fill:#EFEFF2;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -104,6 +105,10 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
 :root[data-theme="dark"] .zone{background:rgba(255,255,255,.18);border-color:#fff}
 :root[data-theme="dark"] .mk,:root[data-theme="dark"] .run .ic{background-color:#fff;border-top-color:#fff}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]) .tag b{color:#fff}:root:not([data-theme="light"]) .zone{background:rgba(255,255,255,.18);border-color:#fff}:root:not([data-theme="light"]) .mk,:root:not([data-theme="light"]) .run .ic{background-color:#fff;border-top-color:#fff}}
+.nie{margin-top:10px;min-height:44px;width:100%;border-radius:999px;border:1.5px solid var(--line);background:var(--fill);color:var(--ink);font:600 15px inherit;font-family:inherit;cursor:pointer}
+.nie.sel{background:var(--ink);color:var(--card)}
+.ratelbl,.sc .cat{font-size:12px}
+.ph .ic64{width:96px;height:96px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
 <body>
@@ -111,8 +116,10 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
  
 <section class="scr on" id="s0">
   <div style="margin-top:auto;margin-bottom:auto">
-    <h1 tabindex="-1">Kleidung, die passt.<br>Beim ersten Mal.</h1>
-    <p class="sub">Zeig uns kurz deinen Stil und deine Maße. Den Rest übernehmen wir.</p>
+    <p class="br" style="letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:14px">Taglia</p>
+    <h1 tabindex="-1">Kleidung, die sitzt.<br>Beim ersten Mal.</h1>
+    <p class="sub">Einmal Maß nehmen. Danach passt, was wir dir zeigen.</p>
+    <p class="br" style="margin-top:18px">Demo mit Beispieldaten: keine echten Marken, Preise oder Bestände.</p>
   </div>
   <button class="btn" onclick="go('s1')">Los geht’s</button>
 </section>
@@ -173,9 +180,9 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
  
 <section class="scr" id="s6">
   <div class="ok">✓</div>
-  <h2 tabindex="-1">Bestellt</h2>
+  <h2 tabindex="-1">Weiter zum Shop</h2>
   <p class="sub" id="s6t"></p>
-  <p class="sub">Nach der Lieferung fragen wir kurz, ob es gepasst hat. So wird deine nächste Empfehlung noch genauer.</p>
+  <p class="sub">Nach der Lieferung meldet die Marke den Kauf zurück. Nur wenn etwas zurückgeht, fragen wir kurz, wo es nicht saß. So wird deine nächste Empfehlung genauer.</p>
   <button class="btn" onclick="location.reload()">Demo neu starten</button>
 </section>
 </main>
@@ -231,7 +238,7 @@ function tee(c,w=1){return `<svg viewBox="0 0 200 190"><path transform="translat
 const me={h:182,sh:46,ch:100,w:84,torso:100,leg:100,gender:null};
 const measurementRanges={h:[150,205],sh:[36,58],ch:[76,130],w:[62,120],torso:[80,125],leg:[80,125]};
 try{
- const saved=JSON.parse(localStorage.getItem("sitzt_profile")||"null");
+ const saved=JSON.parse(localStorage.getItem("taglia_profile")||"null");
  if(saved?.measurements){
   for(const[key,[min,max]]of Object.entries(measurementRanges)){
    const value=saved.measurements[key];
@@ -239,11 +246,11 @@ try{
   }
   if(saved.measurements.gender==="m"||saved.measurements.gender==="w")me.gender=saved.measurements.gender;
  }
-}catch(error){console.warn("Das gespeicherte Sitzt-Profil konnte nicht geladen werden.",error)}
+}catch(error){console.warn("Das gespeicherte Taglia-Profil konnte nicht geladen werden.",error)}
 function selectGender(g){me.gender=g;go("s2")}
 let idx=0,likes=[],target=8,catScores={},profileConsent=false;
 const photos={}; // name -> dataURL, bleibt dauerhaft im Browser
-try{Object.assign(photos,JSON.parse(localStorage.getItem("sitzt_photos")||"{}"))}catch(error){console.warn("Gespeicherte Sitzt-Fotos konnten nicht geladen werden.",error)}
+try{Object.assign(photos,JSON.parse(localStorage.getItem("taglia_photos")||"{}"))}catch(error){console.warn("Gespeicherte Taglia-Fotos konnten nicht geladen werden.",error)}
 CARDS.forEach(c=>{if(photos[c.n])c.img=photos[c.n]});
  
 function go(id){document.querySelectorAll(".scr").forEach(s=>s.classList.toggle("on",s.id===id));
@@ -266,7 +273,7 @@ function pickImg(i){
    c.getContext("2d").drawImage(im,0,0,c.width,c.height);
    const url=c.toDataURL("image/jpeg",.82);
    CARDS[i].img=url;photos[CARDS[i].n]=url;
-   try{localStorage.setItem("sitzt_photos",JSON.stringify(photos))}
+   try{localStorage.setItem("taglia_photos",JSON.stringify(photos))}
    catch(error){console.warn("Das Foto konnte nicht dauerhaft gespeichert werden.",error);$("photoStatus").textContent="Foto eingefügt, aber nicht dauerhaft gespeichert."}
    URL.revokeObjectURL(im.src);
    stack();
@@ -279,46 +286,52 @@ function pickImg(i){
  
 /* ---------- Bewertungs-Stack (1-10) ---------- */
 const ratings=new Array(CARDS.length).fill(null);
+let hr={},excluded={},queue=[],qi=0,subsBuilt=false;
+const ICONS={1:'<svg class="ic64" viewBox="0 0 64 64" aria-hidden="true"><path d="M20 14l-10 6 4 10 6-3v27h24V27l6 3 4-10-10-6c-2 4-6 6-12 6s-10-2-12-6z"/></svg>',2:'<svg class="ic64" viewBox="0 0 64 64" aria-hidden="true"><path d="M22 12l-12 7 4 11 6-3v26h24V27l6 3 4-11-12-7c-1 5-5 8-10 8s-9-3-10-8zM26 30c0 5 3 8 6 8s6-3 6-8"/></svg>',3:'<svg class="ic64" viewBox="0 0 64 64" aria-hidden="true"><path d="M24 10l8 22 8-22 12 8-4 12-6-3v27H22V27l-6 3-4-12zM32 32v24"/></svg>',4:'<svg class="ic64" viewBox="0 0 64 64" aria-hidden="true"><path d="M20 8h24l2 22 6 26H36L32 32l-4 24H12l6-26z"/></svg>',5:'<svg class="ic64" viewBox="0 0 64 64" aria-hidden="true"><path d="M20 12l-10 6 4 10 6-3v25h24V25l6 3 4-10-10-6zM24 36h8v8h-8zM34 36h8v8h-8z"/></svg>',6:'<svg class="ic64" viewBox="0 0 64 64" aria-hidden="true"><path d="M20 12l-10 6 4 10 6-3v25h24V25l6 3 4-10-10-6c-2 3-6 5-12 5s-10-2-12-5zM26 34h12M26 42h12"/></svg>',7:'<svg class="ic64" viewBox="0 0 64 64" aria-hidden="true"><path d="M14 14l20-4 18 14-8 8 6 22H22l4-18-12-6z"/></svg>'};
+const HEADD={1:"Reduziert, klar, zeitlos",2:"Urban, locker, Sneaker-Kultur",3:"Elegant, klassisch, maßgeschneidert",4:"Retro, Second-Hand, 90er und 2000er",5:"Robust, funktional, Handwerk",6:"Sportlich im Alltag",7:"Mutig, experimentell, Statement"};
+function buildSubs(){CATS.forEach(cat=>{const v=hr[cat.id];if(!(v>2))return;
+ const subs=CARDS.map((c,i)=>c.cat===cat.id?i:-1).filter(i=>i>=0);
+ (v>=7?subs:subs.slice(0,2)).forEach(i=>queue.push({h:0,cat:cat.id,i}))})}
 function stack(){
- $("pg").style.width=(idx/CARDS.length*100)+"%";$("cnt").textContent=Math.min(idx+1,CARDS.length)+" von "+CARDS.length;
- const el=$("stack");el.innerHTML="";
- if(idx>=CARDS.length)return;
- const c=CARDS[idx],d=document.createElement("div");d.className="sc";
- const catName=CATS.find(x=>x.id===c.cat).name;
+ if(!queue.length)queue=CATS.map(c=>({h:1,cat:c.id}));
+ const N=queue.length;$("pg").style.width=(qi/N*100)+"%";$("cnt").textContent=Math.min(qi+1,N)+" von "+N;
+ const el=$("stack");el.innerHTML="";if(qi>=N)return;
+ const it=queue[qi],H=!!it.h,idx=it.i;
+ const c=H?{cat:it.cat,n:CATS.find(x=>x.id===it.cat).name,d:HEADD[it.cat]}:CARDS[idx];
+ const catName=H?"Hauptstil":CATS.find(x=>x.id===c.cat).name,im=!H&&c.img;
  const pad=Array.from({length:10},(_,n)=>n+1).map(v=>`<button class="rnum" type="button" aria-label="${v} von 10" onclick="rate(${v})">${v}</button>`).join("");
- d.innerHTML=`<div class="ph${c.img?" has":""}"${c.img?` style="background-image:url('${c.img}')"`:""}>${c.img?"":`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-2.5h6L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg><div>Platz für euer Foto</div><small>${c.n}</small>`}<button class="up" type="button" onclick="pickImg(${idx})">${c.img?"Foto ändern":"Foto einfügen"}</button></div>
+ const d=document.createElement("div");d.className="sc";
+ d.innerHTML=`<div class="ph${im?" has":""}"${im?` style="background-image:url('${c.img}')"`:""}>${im?"":`${ICONS[c.cat]}<small>${c.n}</small>`}${H?"":`<button class="up" type="button" onclick="pickImg(${idx})">${c.img?"Foto ändern":"Foto einfügen"}</button>`}</div>
   <div class="cat">${catName}</div><div class="t">${c.n}</div><div class="d">${c.d}</div>
   <div class="ratepad">${pad}</div>
+  <button class="nie" type="button" onclick="rate(0)" aria-label="Nie, diese Richtung ausschließen">Nie</button>
   <div class="ratelbl"><span>Gefällt mir gar nicht</span><span>Gefällt mir sehr</span></div>`;
  el.appendChild(d);
- d.addEventListener("pointerdown",event=>{if(!event.target.closest("button"))d.dataset.pointerX=event.clientX});
- d.addEventListener("pointerup",event=>{
-  const start=Number(d.dataset.pointerX);
-  if(!event.target.closest("button")&&Number.isFinite(start)&&Math.abs(event.clientX-start)>70)rate(event.clientX>start?10:1);
-  delete d.dataset.pointerX;
- });
 }
 let ratingPending=false;
 function rate(v){
- if(ratingPending||idx>=CARDS.length)return;
- ratingPending=true;
- ratings[idx]=v;
- document.querySelectorAll(".rnum").forEach((b,i)=>{b.classList.toggle("sel",i+1===v);b.disabled=true});
- setTimeout(()=>{idx++;
-  if(idx>=CARDS.length){finishRating();go("sRadar")}else stack();
-  ratingPending=false;
- },280);
+ if(ratingPending||qi>=queue.length)return;ratingPending=true;
+ const it=queue[qi];if(it.h)hr[it.cat]=v;else ratings[it.i]=v;
+ document.querySelectorAll(".rnum,.nie").forEach(b=>b.disabled=true);
+ document.querySelectorAll(v===0?".nie":".rnum").forEach((b,i)=>{if(v===0||i+1===v)b.classList.add("sel")});
+ setTimeout(()=>{qi++;
+  if(qi===CATS.length&&!subsBuilt){subsBuilt=true;buildSubs()}
+  if(qi>=queue.length){finishRating();go("sRadar")}else stack();
+  ratingPending=false},280);
 }
  
 /* ---------- Auswertung & Radar ---------- */
 function finishRating(){
  catScores={};
  CATS.forEach(cat=>{
-  const vals=CARDS.map((c,i)=>c.cat===cat.id?ratings[i]:null).filter(v=>v!==null);
+  if(cat.id===CATS[0].id)excluded={};
+  const h=hr[cat.id],subs=CARDS.map((c,i)=>c.cat===cat.id?ratings[i]:null).filter(v=>v!==null);
+  if(h===0||(subs.length&&subs.every(v=>v===0))){excluded[cat.id]=true;catScores[cat.id]=0;return}
+  const vals=[h].concat(subs.map(v=>v===0?1:v)).filter(v=>v!==undefined&&v!==null);
   const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:1;
   catScores[cat.id]=Math.round((avg-1)/9*100);
  });
- const rated=CARDS.map((c,i)=>({c,r:ratings[i]})).filter(x=>x.r!==null);
+ const rated=CARDS.map((c,i)=>({c,r:ratings[i]})).filter(x=>x.r>0);
  if(rated.length){
   const wsum=rated.reduce((a,x)=>a+x.r,0);
   target=Math.round(rated.reduce((a,x)=>a+x.c.e*x.r,0)/wsum);
@@ -332,7 +345,7 @@ function renderRadar(){
  const rings=[.25,.5,.75,1].map(f=>`<polygon points="${CATS.map((_,i)=>pt(i,R*f).join(",")).join(" ")}" fill="none" stroke="var(--line)" stroke-width="1"/>`).join("");
  const axes=CATS.map((_,i)=>{const[x,y]=pt(i,R);return `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="var(--line)" stroke-width="1"/>`}).join("");
  const poly=CATS.map((c,i)=>pt(i,R*(catScores[c.id]||0)/100).join(",")).join(" ");
- const labels=CATS.map((c,i)=>{const[x,y]=pt(i,R+26);return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="600" fill="var(--ink)">${c.name}</text>`}).join("");
+ const labels=CATS.map((c,i)=>{const[x,y]=pt(i,R+26);return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle" font-size="10.5" font-weight="600" fill="var(--ink)">${c.name}${excluded[c.id]?" ✕":""}</text>`}).join("");
  $("radar").innerHTML=`<svg viewBox="0 0 280 264">${rings}${axes}<polygon points="${poly}" fill="var(--sitzt-accent)" fill-opacity=".12" stroke="var(--sitzt-accent)" stroke-width="2"/>${labels}</svg>`;
  const top=topCats(2);
  $("radarSub").textContent=top.length?`Am stärksten: ${top.map(c=>c.name+" ("+c.s+" %)").join(" · ")}.`:"Noch kein klares Profil – gerne nochmal versuchen.";
@@ -341,15 +354,15 @@ function renderRadar(){
 }
 function checkConsent(){$("confirmBtn").disabled=!($("c1").checked&&$("c2").checked)}
 function confirmProfile(){
- try{localStorage.setItem("sitzt_profile",JSON.stringify({catScores,target,measurements:{...me},savedAt:Date.now()}))}
- catch(error){console.error("Das Sitzt-Profil konnte nicht gespeichert werden.",error);$("savedNote").textContent="Profil konnte nicht gespeichert werden. Bitte prüfe den Speicherplatz deines Browsers.";$("savedNote").classList.add("error");$("savedNote").style.visibility="visible";return}
+ try{localStorage.setItem("taglia_profile",JSON.stringify({catScores,target,measurements:{...me},savedAt:Date.now()}))}
+ catch(error){console.error("Das Taglia-Profil konnte nicht gespeichert werden.",error);$("savedNote").textContent="Profil konnte nicht gespeichert werden. Bitte prüfe den Speicherplatz deines Browsers.";$("savedNote").classList.add("error");$("savedNote").style.visibility="visible";return}
  profileConsent=true;
  $("savedNote").textContent="Gespeichert.";$("savedNote").classList.remove("error");$("savedNote").style.visibility="visible";
  setTimeout(()=>go("sGender"),450);
 }
 function continueWithMeasurements(){
  if(profileConsent){
-  try{localStorage.setItem("sitzt_profile",JSON.stringify({catScores,target,measurements:{...me},savedAt:Date.now()}))}
+  try{localStorage.setItem("taglia_profile",JSON.stringify({catScores,target,measurements:{...me},savedAt:Date.now()}))}
   catch(error){console.error("Die Maße konnten nicht gespeichert werden.",error);$("measurementStatus").textContent="Deine Maße konnten nicht gespeichert werden. Bitte prüfe den Speicherplatz deines Browsers.";$("measurementStatus").style.visibility="visible";return}
  }
  go("s3");
@@ -369,7 +382,13 @@ function smoothPath(pts){ // weiche Kontur durch Punkte (Quadratic-Smoothing)
  d+=`L ${pts[pts.length-1][0]},${pts[pts.length-1][1]} `;
  return d;
 }
+let shown=null,raf=0;
 function sil(active){
+ if(!shown)shown={...me};shown.gender=me.gender;
+ if(matchMedia("(prefers-reduced-motion: reduce)").matches){Object.assign(shown,me);draw(active);return}
+ cancelAnimationFrame(raf);
+ const step=()=>{let mv=false;for(const k of["h","sh","ch","w","torso","leg"]){const d=me[k]-shown[k];if(Math.abs(d)>.05){shown[k]+=d*.2;mv=true}else shown[k]=me[k]}draw(active);if(mv)raf=requestAnimationFrame(step)};step()}
+function draw(active){const me=shown;
  const g=me.gender==="w"?{sh:.86,ch:.96,w:.86,hip:1.22,bust:1.08}:{sh:1.14,ch:1.02,w:1.0,hip:.84,bust:1};
  const m=(v,a,b,lo,hi)=>lo+(Math.max(a,Math.min(b,v))-a)/(b-a)*(hi-lo);
  const cx=110;
@@ -424,10 +443,18 @@ function ask(){
 }
 function pick(p){let best=null;for(const[s,[c,sh]]of Object.entries(p.ch)){const e=c-me.ch,se=sh-me.sh,d=Math.abs(e-target)+(se<0?20:0);if(!best||d<best.d)best={s,e,se,d,c,sh}}best.risk=Math.max(3,Math.round(3+best.d*2.2));return best}
 function score(p){return Math.round(55+(catScores[p.cat]||0)*0.45)}
+function gauge(risk,big){
+ const t=1-Math.min(risk,30)/30,w=t>=.67?"sitzt sehr wahrscheinlich":t>=.34?"sitzt wahrscheinlich":"Größe prüfen";
+ const a=i=>Math.PI-i*Math.PI/3,P2=(an,r)=>[60+r*Math.cos(an),60-r*Math.sin(an)].map(v=>v.toFixed(1)).join(" ");
+ const act=t>=.67?2:t>=.34?1:0,col=["#D9695F","#E8A94B","#5FAE72"];
+ const arcs=[0,1,2].map(i=>`<path d="M${P2(a(i),46)} A46 46 0 0 1 ${P2(a(i+1),46)}" fill="none" stroke="${col[i]}" stroke-width="9" opacity="${i===act?1:.28}"/>`).join("");
+ const an=Math.PI-t*Math.PI;
+ return `<div style="display:flex;flex-direction:column;align-items:center;margin:${big?"16px 0 6px":"8px 0 0"}"><svg role="img" aria-label="Passform-Sicherheit: ${w} (Beispielwert)" viewBox="0 0 120 70" style="width:${big?200:120}px;height:auto">${arcs}<line x1="60" y1="60" x2="${P2(an,36).split(" ")[0]}" y2="${P2(an,36).split(" ")[1]}" stroke="var(--ink)" stroke-width="2.5" stroke-linecap="round"/><circle cx="60" cy="60" r="3.5" fill="var(--ink)"/></svg><div class="br" style="margin-top:2px">Passform-Sicherheit: <b style="color:var(--ink)">${w}</b></div>${big?'<div class="br" style="font-size:12px">Beispielwert in der Demo</div>':""}</div>`}
 function list(){
- const arr=P.map(p=>({p,r:pick(p),s:score(p)})).sort((a,b)=>b.s-a.s);
- $("s4s").textContent=`Für Brust ${me.ch} cm, Schulter ${me.sh} cm und deine gewünschte Weite von etwa +${target} cm.`;
- $("cards").innerHTML=arr.map(({p,r,s})=>`<button class="pc" onclick="detail(${P.indexOf(p)})"><div class="im">${tee(p.c,p.w)}</div><div class="rw2"><div><div class="br">${p.b}</div><div class="nm">${p.n}</div></div><div class="sz">${r.s}</div></div><div class="mt">Stil <b>${s} %</b> · Retourrisiko <b>${r.risk} %</b> · <b>${p.pr} €</b></div></button>`).join("");
+ const arr=P.filter(p=>!excluded[p.cat]).map(p=>({p,r:pick(p),s:score(p)})).sort((a,b)=>b.s-a.s);
+ $("s4s").textContent=(CATS.some(c=>excluded[c.id])?"Ausgeschlossen: "+CATS.filter(c=>excluded[c.id]).map(c=>c.name).join(", ")+". ":"")+`Für Brust ${me.ch} cm, Schulter ${me.sh} cm und deine gewünschte Weite von etwa +${target} cm.`;
+ if(!arr.length){$("cards").innerHTML='<p class="sub">Die Demo hat keine Beispieltreffer außerhalb der Stile, die du ausgeschlossen hast.</p>';return}
+ $("cards").innerHTML=arr.map(({p,r,s})=>`<button class="pc" onclick="detail(${P.indexOf(p)})"><div class="im">${tee(p.c,p.w)}</div><div class="rw2"><div><div class="br">${p.b}</div><div class="nm">${p.n}</div></div><div class="sz">${r.s}</div></div><div class="mt">Stil <b>${s} %</b> · <b>${p.pr} €</b></div>${gauge(r.risk,false)}</button>`).join("");
 }
 function meas(l,b,g,lo,hi,max){const e=g-b,p=v=>Math.max(0,Math.min(100,v/max*100));
  return `<div style="margin:14px 0"><div class="rw2" style="margin:0"><b>${l}</b><span class="br">Körper ${b} · Shirt ${g} · ${e>=0?"+":""}${e} cm</span></div><div class="ruler"><div class="zone" style="left:${p(lo)}%;width:${p(hi)-p(lo)}%"></div><div class="mk" style="left:${p(e)}%"></div></div><div class="scl"><span>0</span><span>${max/2}</span><span>${max} cm</span></div></div>`}
@@ -435,10 +462,10 @@ let sel=0;
 function detail(i){
  sel=i;const p=P[i],r=pick(p);
  const alt=P.filter((_,k)=>k!==i).map(q=>`${q.b} <b style="color:var(--ink)">${pick(q).s}</b>`).join(" · ");
- $("detail").innerHTML=`<div class="pc" style="cursor:default"><div class="im">${tee(p.c,p.w)}</div></div><div class="br">${p.b}</div><h2 tabindex="-1">${p.n}</h2><p class="sub">Wir empfehlen <b style="color:var(--ink)">Größe ${r.s}</b>. Das blaue Feld ist deine gewünschte Weite.</p>${meas("Brust",me.ch,r.c,target-2,target+2,20)}${meas("Schulter",me.sh,r.sh,0,4,10)}<p class="br" style="margin:12px 0 20px">Dieselbe Person, andere Marken: ${alt}</p><button class="btn" onclick="buy()">Größe ${r.s} kaufen · ${p.pr} €</button><button class="btn sec" onclick="go('s4')">Zurück</button>`;
+ $("detail").innerHTML=`<div class="pc" style="cursor:default"><div class="im">${tee(p.c,p.w)}</div></div><div class="br">${p.b}</div><h2 tabindex="-1">${p.n}</h2><p class="sub">Wir empfehlen <b style="color:var(--ink)">Größe ${r.s}</b>. Das blaue Feld ist deine gewünschte Weite.</p>${gauge(r.risk,true)}${meas("Brust",me.ch,r.c,target-2,target+2,20)}${meas("Schulter",me.sh,r.sh,0,4,10)}<p class="br" style="margin:12px 0 20px">Dieselbe Person, andere Marken: ${alt}</p><button class="btn" onclick="buy()">Zum Shop von ${p.b} · Größe ${r.s} · ${p.pr} €</button><button class="btn sec" onclick="go('s4')">Zurück</button>`;
  go("s5");
 }
-function buy(){const p=P[sel],r=pick(p);$("s6t").textContent=`${p.b} ${p.n}, Größe ${r.s}. Geschätztes Retourrisiko: ${r.risk} %.`;go("s6")}
+function buy(){const p=P[sel],r=pick(p);$("s6t").textContent=`${p.b} ${p.n}, Größe ${r.s}. In der echten App leitet Taglia dich jetzt zum Shop der Marke weiter. In dieser Demo wird nichts bestellt.`;go("s6")}
 </script>
 </body>
 </html>
