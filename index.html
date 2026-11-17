@@ -114,7 +114,19 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
 <body>
 <main class="phone">
  
-<section class="scr on" id="s0">
+<section class="scr on" id="sLang">
+  <div style="margin-top:auto;margin-bottom:auto">
+    <p class="br" style="letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:14px">Taglia</p>
+    <h1 tabindex="-1">Sprache · Language</h1>
+    <p class="sub">Wähle deine Sprache. · Choose your language.</p>
+    <div style="display:flex;gap:12px;margin-top:18px">
+      <button class="pc" style="text-align:center" onclick="setLang('de')"><div class="nm" style="text-align:center;padding:22px 0">Deutsch</div></button>
+      <button class="pc" style="text-align:center" onclick="setLang('en')"><div class="nm" style="text-align:center;padding:22px 0">English</div></button>
+    </div>
+  </div>
+</section>
+ 
+<section class="scr" id="s0">
   <div style="margin-top:auto;margin-bottom:auto">
     <p class="br" style="letter-spacing:.14em;text-transform:uppercase;font-weight:600;margin-bottom:14px">Taglia</p>
     <h1 tabindex="-1">Kleidung, die sitzt.<br>Beim ersten Mal.</h1>
@@ -128,7 +140,7 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
   <h2 tabindex="-1">Wie sehr gefällt dir das?</h2>
   <div class="prog" aria-hidden="true"><i id="pg"></i></div><div class="cnt" id="cnt" aria-live="polite"></div>
   <div class="stack" id="stack"></div>
-  <p class="swipehint">Bewerte von 1 bis 10 oder wische nach links/rechts für 1 oder 10.</p>
+  <p class="swipehint">Bewerte von 1 bis 10. Mit „Nie“ schließt du eine Richtung aus.</p>
 </section>
  
 <section class="scr" id="sRadar">
@@ -190,6 +202,37 @@ input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;bac
  
 <script>
 const $=id=>document.getElementById(id);
+/* ---------- Sprache (Deutsch / English) ---------- */
+let lang="de";
+const EN={"Kleidung, die sitzt.": "Clothes that fit.", "Beim ersten Mal.": "The first time.", "Einmal Maß nehmen. Danach passt, was wir dir zeigen.": "Measure once. Then what we show you fits.", "Demo mit Beispieldaten: keine echten Marken, Preise oder Bestände.": "Demo with sample data: no real brands, prices or stock.", "Los geht’s": "Let’s go", "Wie sehr gefällt dir das?": "How much do you like this?", "Bewerte von 1 bis 10. Mit „Nie“ schließt du eine Richtung aus.": "Rate from 1 to 10. “Never” rules a direction out.", "Dein Stil-Profil": "Your style profile", "Basierend auf dem, was dir gefallen hat.": "Based on what you liked.", "Ich möchte, dass dieses Stilprofil und meine Angaben für Empfehlungen gespeichert werden.": "I want this style profile and my details to be saved for recommendations.", "Ich habe die": "I have read the", "Datenschutzerklärung": "privacy policy", "gelesen und stimme zu.": "and agree.", "Profil speichern & weiter": "Save profile & continue", "Gespeichert.": "Saved.", "Wie sollen wir deine Figur zeichnen?": "How should we draw your figure?", "Das legt die Grundform der Silhouette fest. Deine Maße passt du danach selbst an.": "This sets the basic shape of the silhouette. You adjust your measurements afterwards.", "Männlich": "Male", "Weiblich": "Female", "Deine Maße": "Your measurements", "Zieh die Regler, bis die Figur zu dir passt.": "Drag the sliders until the figure looks like you.", "Weiter": "Next", "Was brauchst du?": "What do you need?", "Ich brauche ein neues T-Shirt": "I need a new T-shirt", "Drei Treffer für dich": "Three matches for you", "Weiter zum Shop": "On to the shop", "Nach der Lieferung meldet die Marke den Kauf zurück. Nur wenn etwas zurückgeht, fragen wir kurz, wo es nicht saß. So wird deine nächste Empfehlung genauer.": "After delivery, the brand reports the purchase back. Only if something is returned do we briefly ask where it didn’t fit. This makes your next recommendation more accurate.", "Demo neu starten": "Restart demo", "Passende T-Shirts": "Matching T-shirts", "Zurück": "Back", "Hauptstil": "Main style", "Nie": "Never", "Nie, diese Richtung ausschließen": "Never, rule this direction out", "Foto einfügen": "Add photo", "Foto ändern": "Change photo", "Gefällt mir gar nicht": "I don’t like it at all", "Gefällt mir sehr": "I like it a lot", "Stil": "Style", "Brust": "Chest", "Schulter": "Shoulders", "Körpergröße": "Height", "Schulterbreite": "Shoulder width", "Brustumfang": "Chest circumference", "Taille": "Waist", "Oberkörper (Hals–Taille)": "Upper body (neck–waist)", "Beine (Taille–Fuß)": "Legs (waist–foot)", "Passform-Sicherheit:": "Fit confidence:", "Beispielwert in der Demo": "Sample value in the demo", "sitzt sehr wahrscheinlich": "very likely to fit", "sitzt wahrscheinlich": "likely to fit", "Größe prüfen": "check the size", "Wir empfehlen": "We recommend", ". Das blaue Feld ist deine gewünschte Weite.": ". The blue area is the ease you want.", "Dieselbe Person, andere Marken:": "Same person, other brands:", "Stilprofil anwenden": "Apply style profile", "Bei Partnermarken suchen": "Search partner brands", "Größentabellen abgleichen": "Compare size charts", "Dein Geschmack": "Your taste", "214 Artikel in 12 Shops": "214 items in 12 shops", "Deine Maße und gewünschte Weite": "Your measurements and preferred ease", "Noch kein klares Profil – gerne nochmal versuchen.": "No clear profile yet. Feel free to try again.", "Die Demo hat keine Beispieltreffer außerhalb der Stile, die du ausgeschlossen hast.": "The demo has no sample matches outside the styles you ruled out.", "Foto eingefügt, aber nicht dauerhaft gespeichert.": "Photo added, but not saved permanently.", "Das ausgewählte Bild konnte nicht geladen werden.": "The selected image could not be loaded.", "Profil konnte nicht gespeichert werden. Bitte prüfe den Speicherplatz deines Browsers.": "The profile could not be saved. Please check your browser storage.", "Deine Maße konnten nicht gespeichert werden. Bitte prüfe den Speicherplatz deines Browsers.": "Your measurements could not be saved. Please check your browser storage.", "Skandinavisch, reduziert": "Scandinavian, pared back", "Dezenter Luxus": "Understated luxury", "Bewusst gewöhnlich": "Deliberately ordinary", "Wenige, vielseitige Teile": "Few, versatile pieces", "Baggy, Old-School": "Baggy, old school", "Funktional, urban": "Functional, urban", "Outdoor im Alltag": "Outdoor in everyday life", "Locker, lässig": "Relaxed, casual", "Zurückhaltend, hochwertig": "Restrained, high quality", "Adrett, sportlich-elegant": "Neat, sporty-elegant", "Smart, entspannt": "Smart, relaxed", "Akademisch, klassisch": "Academic, classic", "Second-Hand-Mix": "Second-hand mix", "Rau, ungepflegt": "Raw, dishevelled", "Verspielt, nostalgisch": "Playful, nostalgic", "Fließend, verspielt": "Flowing, playful", "Traditionell, robust": "Traditional, sturdy", "Praktisch, stabil": "Practical, durable", "Outdoor-tauglich": "Built for the outdoors", "Werkstatt-Look": "Workshop look", "Sportlich, bequem": "Sporty, comfortable", "Technisch, urban": "Technical, urban", "Leger, aktiv": "Easy, active", "Asymmetrisch, roh": "Asymmetric, raw", "Futuristisch, düster": "Futuristic, dark", "Auffällig, exklusiv": "Eye-catching, exclusive", "Reduziert, klar, zeitlos": "Pared back, clean, timeless", "Urban, locker, Sneaker-Kultur": "Urban, relaxed, sneaker culture", "Elegant, klassisch, maßgeschneidert": "Elegant, classic, tailored", "Retro, Second-Hand, 90er und 2000er": "Retro, second-hand, 90s and 2000s", "Robust, funktional, Handwerk": "Rugged, functional, craft", "Sportlich im Alltag": "Sporty in everyday life", "Mutig, experimentell, Statement": "Bold, experimental, statement", "Gym-Wear im Alltag": "Everyday gym wear", "Mechaniker-Chic": "Mechanic chic"};
+const RX=[
+ [/^(\d+) von (\d+)$/,m=>`${m[1]} of ${m[2]}`],
+ [/^(\d+) von 10$/,m=>`${m[1]} of 10`],
+ [/^Hi! Dein Stil und deine Maße sind gespeichert\.(?: Am stärksten: (.+)\.)?$/,m=>"Hi! Your style and measurements are saved."+(m[1]?` Strongest: ${m[1]}.`:"")],
+ [/^Am stärksten: (.+)\.$/,m=>`Strongest: ${m[1]}.`],
+ [/^Passform-Sicherheit: (.+) \(Beispielwert\)$/,m=>`Fit confidence: ${tr(m[1])} (sample value)`],
+ [/^Größe (\S+)$/,m=>`Size ${m[1]}`],
+ [/^Körper (\d+) · Shirt (\d+) · ([+-]?\d+) cm$/,m=>`Body ${m[1]} · Shirt ${m[2]} · ${m[3]} cm`],
+ [/^Zum Shop von (.+) · Größe (\S+) · (\d+) €$/,m=>`To the ${m[1]} shop · Size ${m[2]} · ${m[3]} €`],
+ [/^(.+), Größe (\S+)\. In der echten App leitet Taglia dich jetzt zum Shop der Marke weiter\. In dieser Demo wird nichts bestellt\.$/,m=>`${m[1]}, size ${m[2]}. In the real app, Taglia now takes you to the brand’s shop. In this demo, nothing is ordered.`],
+ [/^(?:Ausgeschlossen: (.+)\. )?Für Brust (\d+) cm, Schulter (\d+) cm und deine gewünschte Weite von etwa \+(\d+) cm\.$/,m=>(m[1]?`Ruled out: ${m[1]}. `:"")+`For chest ${m[2]} cm, shoulders ${m[3]} cm and your preferred ease of about +${m[4]} cm.`]
+];
+function tr(s){
+ if(lang!=="en")return s;const k=s.trim();if(!k)return s;
+ let o=EN[k];
+ if(o===undefined)for(const[r,f]of RX){const m=k.match(r);if(m){o=f(m);break}}
+ return o===undefined?s:s.replace(k,()=>o);
+}
+function trNode(n){
+ if(n.nodeType===3){const v=tr(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v;return}
+ if(n.nodeType!==1||n.tagName==="SCRIPT"||n.tagName==="STYLE")return;
+ for(const a of["aria-label","title"]){const v=n.getAttribute(a);if(v){const w=tr(v);if(w!==v)n.setAttribute(a,w)}}
+ n.childNodes.forEach(trNode);
+}
+new MutationObserver(ms=>{if(lang!=="en")return;
+ ms.forEach(m=>{if(m.type==="childList")m.addedNodes.forEach(trNode);else trNode(m.target)})
+}).observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["aria-label"]});
+function setLang(l){lang=l;document.documentElement.lang=l;if(l==="en")trNode(document.body);go("s0")}
  
 /* ---------- Stil-Kategorien & Karten ---------- */
 const CATS=[
@@ -260,7 +303,7 @@ function go(id){document.querySelectorAll(".scr").forEach(s=>s.classList.toggle(
  if(id==="s2"){rows();sil()}
  if(id==="s3")$("hi").textContent="Hi! Dein Stil und deine Maße sind gespeichert."+(Object.keys(catScores).length?" Am stärksten: "+topCats(1).map(c=>c.name).join(", ")+".":"");
 }
-go("s0");
+go("sLang");
  
 /* ---------- Foto-Upload (bleibt dauerhaft gespeichert) ---------- */
 function pickImg(i){
